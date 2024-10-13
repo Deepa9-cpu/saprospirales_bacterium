@@ -153,6 +153,13 @@ total_coding_table <- data.frame(
 )
 
 print(total_coding_table)
+```
+
+## Difference between two organism:
+here
+
+
+```{r}
 
 # Calculate sequence lengths for both organisms
 ecoli_cds_lengths <- sapply(ecoli_cds, length)
@@ -172,6 +179,14 @@ median_sapros <- median(sapros_cds_lengths)
 
 cat("E. coli: Mean =", mean_ecoli, ", Median =", median_ecoli, "\n")
 cat("Saprospirales: Mean =", mean_sapros, ", Median =", median_sapros, "\n")
+
+```
+
+## Difference between two organism:
+here
+
+
+```{r}
 
 # Define the standard nucleotides
 nucleotides <- c("A", "C", "G", "T")
@@ -195,6 +210,14 @@ barplot(nuc_freq_matrix, beside = TRUE,
         col = c("blue", "red"),
         ylab = "Frequency",
         args.legend = list(x = "topright"))
+```
+
+## Difference between two organism:
+here
+
+
+
+```{r}
 
 # Calculate codon usage for E. coli
 ecoli_codon_usage <- uco(unlist(ecoli_cds), frame = 0, index = "freq")
@@ -230,3 +253,9 @@ if (length(ecoli_codon_usage_vector) == length(sapros_codon_usage_vector)) {
 
 
 ```
+
+## Difference between two organism:
+here
+
+
+

@@ -2,6 +2,7 @@
 editor_options:
   markdown:
     wrap: 72
+output: pdf_document
 ---
 
 ```{r}
@@ -110,8 +111,7 @@ download.file(URL_saprospirales, destfile = "saprospirales_cds.fa.gz")
 saprospirales_cds <- read.fasta(file = "saprospirales_cds.fa.gz", seqtype = "DNA")
 saprospirales_cds_count <- length(saprospirales_cds)
 
-# Check the first few sequences to ensure it was read correctly
-head(saprospirales_cds)
+
 
 # URL for E. coli CDS
 URL_ecoli <- "http://ftp.ensemblgenomes.org/pub/bacteria/release-53/fasta/bacteria_0_collection/escherichia_coli_str_k_12_substr_mg1655_gca_000005845/cds/Escherichia_coli_str_k_12_substr_mg1655_gca_000005845.ASM584v2.cds.all.fa.gz"
@@ -123,8 +123,7 @@ download.file(URL_ecoli, destfile = "ecoli_cds.fa.gz")
 ecoli_cds <- read.fasta(file = "ecoli_cds.fa.gz", seqtype = "DNA")
 ecoli_cds_count <- length(ecoli_cds)
 
-# Check the first few sequences for E. coli
-head(ecoli_cds)
+
 
 # Create a table comparing the number of coding sequences for both organisms
 cds_table <- data.frame(
@@ -133,6 +132,15 @@ cds_table <- data.frame(
 )
 
 print(cds_table)
+
+```
+
+## Difference between two organism:
+Saprospirales bacterium has a higher number of coding sequences (4,527) compared to *E. coli* (4,239), indicating a potentially more complex genome and greater functional diversity. This difference suggests that *Saprospirales bacterium* may possess specialized genes that enable it to adapt to specific environmental conditions or ecological niches, whereas *E. coli* has a more streamlined genome optimized for versatility in various laboratory and natural settings.
+
+
+
+```{r}
 
 # Calculate the total coding DNA length for both organisms
 ecoli_total_coding_dna <- sum(sapply(ecoli_cds, length))

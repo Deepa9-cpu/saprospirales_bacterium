@@ -68,3 +68,103 @@ growth_data$Growth_10_years <- growth_data$Circumf_2020_cm - growth_data$Circumf
 t_test_growth <- t.test(Growth_10_years ~ Site, data = growth_data)
 t_test_growth$p.value
 
+
+# Part 2
+
+
+# Install required packages
+install.packages("R.utils")
+
+# Load the necessary libraries
+library(R.utils)
+
+# URL for Saprospirales bacterium CDS
+URL_saprospirales = "https://ftp.ensemblgenomes.ebi.ac.uk/pub/bacteria/release-59/fasta/bacteria_58_collection/saprospirales_bacterium_gca_003448025/cds/Saprospirales_bacterium_gca_003448025.ASM344802v1.cds.all.fa.gz"
+
+# Download the file
+download.file(URL_saprospirales, destfile="saprospirales_cds.fa.gz")
+
+# Read the FASTA file using seqinr's read.fasta
+saprospirales_cds <- read.fasta(file = "saprospirales_cds.fa.gz", seqtype = "DNA")
+saprospirales_cds_count <- length(saprospirales_cds)
+
+# Check the first few sequences to ensure it was read correctly
+head(saprospirales_cds)
+
+# URL for E. coli CDS
+URL_ecoli = "http://ftp.ensemblgenomes.org/pub/bacteria/release-53/fasta/bacteria_0_collection/escherichia_coli_str_k_12_substr_mg1655_gca_000005845/cds/Escherichia_coli_str_k_12_substr_mg1655_gca_000005845.ASM584v2.cds.all.fa.gz"
+
+# Download the file
+download.file(URL_ecoli, destfile="ecoli_cds.fa.gz")
+
+# Read the FASTA file for E. coli using seqinr's read.fasta
+ecoli_cds <- read.fasta(file = "ecoli_cds.fa.gz", seqtype = "DNA")
+ecoli_cds_count <- length(ecoli_cds)
+
+# Check the first few sequences for E. coli
+head(ecoli_cds)
+
+# Create a table comparing the number of coding sequences for both organisms
+cds_table <- data.frame(
+  Organism = c("E. coli", "Saprospirales"),
+  Coding_Sequences = c(ecoli_cds_count, saprospirales_cds_count)
+)
+
+print(cds_table)
+
+# Calculate the total coding DNA length for both organisms
+ecoli_total_coding_dna <- sum(sapply(ecoli_cds, length))
+sapros_total_coding_dna <- sum(sapply(saprospirales_cds, length))
+
+# Create a table comparing the total coding DNA lengths
+total_coding_table <- data.frame(
+  Organism = c("E. coli", "Saprospirales"),
+  Total_Coding_DNA = c(ecoli_total_coding_dna, sapros_total_coding_dna)
+)
+
+print(total_coding_table)
+
+# Calculate sequence lengths for both organisms
+ecoli_cds_lengths <- sapply(ecoli_cds, length)
+sapros_cds_lengths <- sapply(saprospirales_cds, length)
+
+# Boxplot of coding sequence lengths
+boxplot(ecoli_cds_lengths, sapros_cds_lengths,
+        names = c("E. coli", "Saprospirales"),
+        main = "Coding Sequence Lengths",
+        ylab = "Sequence Length (bp)")
+
+# Calculate the mean and median of sequence lengths for both organisms
+mean_ecoli <- mean(ecoli_cds_lengths)
+median_ecoli <- median(ecoli_cds_lengths)
+mean_sapros <- mean(sapros_cds_lengths)
+median_sapros <- median(sapros_cds_lengths)
+
+cat("E. coli: Mean =", mean_ecoli, ", Median =", median_ecoli, "\n")
+cat("Saprospirales: Mean =", mean_sapros, ", Median =", median_sapros, "\n")
+
+
+# Define the standard nucleotides
+nucleotides <- c("A", "C", "G", "T")
+
+# Combine all E. coli sequences for nucleotide frequency calculation
+ecoli_concat <- paste(unlist(ecoli_cds), collapse = "")  # Concatenate all sequences
+ecoli_nuc_freq <- table(factor(strsplit(ecoli_concat, split = "")[[1]], levels = nucleotides))
+
+# Combine all Saprospirales sequences for nucleotide frequency calculation
+sapros_concat <- paste(unlist(saprospirales_cds), collapse = "")  # Concatenate all sequences
+sapros_nuc_freq <- table(factor(strsplit(sapros_concat, split = "")[[1]], levels = nucleotides))
+
+# Create a matrix for the bar plot
+nuc_freq_matrix <- rbind(as.numeric(ecoli_nuc_freq), as.numeric(sapros_nuc_freq))
+
+# Create bar plots for nucleotide frequencies
+barplot(nuc_freq_matrix, beside = TRUE,
+        names.arg = nucleotides,
+        legend.text = c("E. coli", "Saprospirales"),
+        main = "Nucleotide Frequency Comparison",
+        col = c("blue", "red"),
+        ylab = "Frequency",
+        args.legend = list(x = "topright"))
+
+

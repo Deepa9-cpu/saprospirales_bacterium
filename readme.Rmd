@@ -156,7 +156,7 @@ print(total_coding_table)
 ```
 
 ## Difference between two organism:
-here
+The primary difference between E. coli and Saprospirales bacterium (GCA_003448025) lies in the total coding DNA, with E. coli having 3,978,528 base pairs and Saprospirales having 4,200,321 base pairs. This suggests that Saprospirales may possess a slightly larger genome, potentially allowing for more diverse metabolic and environmental adaptations compared to E. coli.
 
 
 ```{r}
@@ -183,8 +183,7 @@ cat("Saprospirales: Mean =", mean_sapros, ", Median =", median_sapros, "\n")
 ```
 
 ## Difference between two organism:
-here
-
+The comparison of coding sequence lengths between *E. coli* and *Saprospirales bacterium* reveals two key differences. First, while the mean coding sequence length is quite similar between the two organisms, with *E. coli* having a slightly higher mean (938.55 bp) than *Saprospirales* (927.84 bp), the difference lies in their median values. The median length for *E. coli* is notably higher at 831 bp compared to *Saprospirales*, which has a median of 690 bp. This suggests that although the average coding sequence lengths are similar, *Saprospirales* exhibits a wider variation, likely containing more shorter sequences compared to *E. coli*, where the lengths are more evenly distributed around the mean.
 
 ```{r}
 
@@ -212,9 +211,6 @@ barplot(nuc_freq_matrix, beside = TRUE,
         args.legend = list(x = "topright"))
 ```
 
-## Difference between two organism:
-
-The primary difference between E. coli and Saprospirales bacterium (GCA_003448025) lies in the number of coding sequences, with E. coli having 4239 CDS and Saprospirales having 4527. This suggests that Saprospirales may possess a slightly larger genome, potentially allowing for more diverse metabolic and environmental adaptations compared to E. coli
 
 
 
@@ -256,6 +252,9 @@ if (length(ecoli_codon_usage_vector) == length(sapros_codon_usage_vector)) {
 ```
 
 ## Difference between two organism:
-The primary difference between E. coli and Saprospirales bacterium (GCA_003448025) lies in the total coding DNA, with E. coli having 3,978,528 base pairs and Saprospirales having 4,200,321 base pairs. This suggests that Saprospirales may possess a slightly larger genome, potentially allowing for more diverse metabolic and environmental adaptations compared to E. coli.
 
+The codon usage bias comparison between *E. coli* and *Saprospirales bacterium* reveals notable differences, as shown in the bar plot. *E. coli* exhibits a more pronounced bias for certain codons, with several codons having visibly higher frequencies (e.g., the tall blue bars), indicating a strong preference for specific codons in its coding sequences. In contrast, *Saprospirales* demonstrates a relatively balanced codon usage distribution, with fewer extreme values, as indicated by the more evenly distributed red bars.
+
+
+These differences suggest that *E. coli* may have evolved to preferentially use certain codons, potentially due to its tRNA availability or other factors related to translation efficiency. Meanwhile, *Saprospirales* appears to have a less biased codon usage, which could imply different selective pressures or a more diverse set of tRNA genes. This variation in codon usage bias could reflect differences in the organisms' evolutionary history, genome composition, and translational mechanisms.
 

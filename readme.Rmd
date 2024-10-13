@@ -1,76 +1,98 @@
 ---
-editor_options: 
-  markdown: 
+editor_options:
+  markdown:
     wrap: 72
 ---
 
+```{r}
 # Downloading the gene_expression.tsv file
-
-download.file("<https://raw.githubusercontent.com/ghazkha/Assessment4/refs/heads/main/gene_expression.tsv>",
-"gene_expression.tsv")
+download.file("https://raw.githubusercontent.com/ghazkha/Assessment4/refs/heads/main/gene_expression.tsv",
+              "gene_expression.tsv")
 
 # Install and load required packages
-
 if (!require("seqinr")) install.packages("seqinr")
 
 # Load seqinr package
-
 library(seqinr)
 
 # Read downloaded file
+gene_expression <- read.table("gene_expression.tsv", header = TRUE, sep = "\t", row.names = 1)
 
-gene_expression \<- read.table("gene_expression.tsv", header = TRUE, sep
-= "\t", row.names = 1) head(gene_expression)
-
-# new column with the mean of the other columns
-
-gene_expression\$Mean \<- rowMeans(gene_expression)
+# Display the first few rows of the gene expression data
 head(gene_expression)
 
-# List of 10 genes with the highest mean expression
+# Create a new column with the mean of the other columns
+gene_expression$Mean <- rowMeans(gene_expression)
 
-top_10_genes \<- head(gene_expression[order(-gene_expression\$Mean), ],
-10) top_10_genes
+# Display the first few rows with the new Mean column
+head(gene_expression)
 
-# number of genes with a mean expression \< 10
+# List the 10 genes with the highest mean expression
+top_10_genes <- head(gene_expression[order(-gene_expression$Mean), ], 10)
 
-low_mean_genes \<- sum(gene_expression\$Mean \< 10) low_mean_genes
+# Display the top 10 genes
+top_10_genes
 
-# histogram of mean values
+# Count the number of genes with a mean expression less than 10
+low_mean_genes <- sum(gene_expression$Mean < 10)
 
-hist(gene_expression\$Mean, main = "Histogram of Gene Expression Means",
-xlab = "Mean Expression")
+# Display the number of genes with mean expression < 10
+low_mean_genes
 
+```
+
+```{r, echo=FALSE}
+# Histogram of mean values
+hist(gene_expression$Mean, main = "Histogram of Gene Expression Means", 
+     xlab = "Mean Expression")
+
+```
+ 
+```{r}
 # Downloading the growth_data.csv file
-
-download.file("<https://raw.githubusercontent.com/ghazkha/Assessment4/refs/heads/main/growth_data.csv>",
-"growth_data.csv")
+download.file("https://raw.githubusercontent.com/ghazkha/Assessment4/refs/heads/main/growth_data.csv",
+              "growth_data.csv")
 
 # Read and inspect the "growth_data.csv" file
+growth_data <- read.csv("growth_data.csv")
 
-growth_data \<- read.csv("growth_data.csv") colnames(growth_data)
+# Display column names
+colnames(growth_data)
 
-# mean and standard deviation  of both sites
+# Calculate the mean and standard deviation of tree circumference at the start (2005) and end (2020) of the study for both sites
+circumf_stats <- aggregate(cbind(Circumf_2005_cm, Circumf_2020_cm) ~ Site, 
+                           data = growth_data, 
+                           FUN = function(x) c(mean = mean(x), sd = sd(x)))
+circumf_stats
 
-aggregate(cbind(Circumf_2005_cm, Circumf_2020_cm) ~ Site, data = growth_data, FUN = function(x) c(mean = mean(x), sd = sd(x)))
-
-# boxplot of tree circumferences at the start and end of the study for both sites
+# Boxplot of tree circumference in 2005 by site
 boxplot(Circumf_2005_cm ~ Site, data = growth_data, 
-        main = "Tree Circumference in 2005 by Site", xlab = "Site", ylab = "Circumference (cm)")
+        main = "Tree Circumference in 2005 by Site", 
+        xlab = "Site", 
+        ylab = "Circumference (cm)")
 
+# Boxplot of tree circumference in 2020 by site
 boxplot(Circumf_2020_cm ~ Site, data = growth_data, 
-        main = "Tree Circumference in 2020 by Site", xlab = "Site", ylab = "Circumference (cm)")
+        main = "Tree Circumference in 2020 by Site", 
+        xlab = "Site", 
+        ylab = "Circumference (cm)")
 
-# mean growth over the last 10 years (2010-2020) at each site
-growth_data$Growth_10_years <- growth_data$Circumf_2020_cm - growth_data$Circumf_2010_cm aggregate(Growth_10_years ~ Site, data = growth_data, mean)
+# Calculate mean growth over the last 10 years (2010-2020) at each site
+growth_data$Growth_10_years <- growth_data$Circumf_2020_cm - growth_data$Circumf_2010_cm
+mean_growth <- aggregate(Growth_10_years ~ Site, data = growth_data, mean)
+mean_growth
 
-# t-test to estimate if the 10-year growth differs between the two sites
+# Perform a t-test to estimate if the 10-year growth differs between the two sites
 t_test_growth <- t.test(Growth_10_years ~ Site, data = growth_data)
 t_test_growth$p.value
 
 
+```
+
 # Part 2
 
+```{r}
+# Part 2
 
 # Install required packages
 install.packages("R.utils")
@@ -79,10 +101,10 @@ install.packages("R.utils")
 library(R.utils)
 
 # URL for Saprospirales bacterium CDS
-URL_saprospirales = "https://ftp.ensemblgenomes.ebi.ac.uk/pub/bacteria/release-59/fasta/bacteria_58_collection/saprospirales_bacterium_gca_003448025/cds/Saprospirales_bacterium_gca_003448025.ASM344802v1.cds.all.fa.gz"
+URL_saprospirales <- "https://ftp.ensemblgenomes.ebi.ac.uk/pub/bacteria/release-59/fasta/bacteria_58_collection/saprospirales_bacterium_gca_003448025/cds/Saprospirales_bacterium_gca_003448025.ASM344802v1.cds.all.fa.gz"
 
 # Download the file
-download.file(URL_saprospirales, destfile="saprospirales_cds.fa.gz")
+download.file(URL_saprospirales, destfile = "saprospirales_cds.fa.gz")
 
 # Read the FASTA file using seqinr's read.fasta
 saprospirales_cds <- read.fasta(file = "saprospirales_cds.fa.gz", seqtype = "DNA")
@@ -92,10 +114,10 @@ saprospirales_cds_count <- length(saprospirales_cds)
 head(saprospirales_cds)
 
 # URL for E. coli CDS
-URL_ecoli = "http://ftp.ensemblgenomes.org/pub/bacteria/release-53/fasta/bacteria_0_collection/escherichia_coli_str_k_12_substr_mg1655_gca_000005845/cds/Escherichia_coli_str_k_12_substr_mg1655_gca_000005845.ASM584v2.cds.all.fa.gz"
+URL_ecoli <- "http://ftp.ensemblgenomes.org/pub/bacteria/release-53/fasta/bacteria_0_collection/escherichia_coli_str_k_12_substr_mg1655_gca_000005845/cds/Escherichia_coli_str_k_12_substr_mg1655_gca_000005845.ASM584v2.cds.all.fa.gz"
 
 # Download the file
-download.file(URL_ecoli, destfile="ecoli_cds.fa.gz")
+download.file(URL_ecoli, destfile = "ecoli_cds.fa.gz")
 
 # Read the FASTA file for E. coli using seqinr's read.fasta
 ecoli_cds <- read.fasta(file = "ecoli_cds.fa.gz", seqtype = "DNA")
@@ -143,7 +165,6 @@ median_sapros <- median(sapros_cds_lengths)
 cat("E. coli: Mean =", mean_ecoli, ", Median =", median_ecoli, "\n")
 cat("Saprospirales: Mean =", mean_sapros, ", Median =", median_sapros, "\n")
 
-
 # Define the standard nucleotides
 nucleotides <- c("A", "C", "G", "T")
 
@@ -167,8 +188,6 @@ barplot(nuc_freq_matrix, beside = TRUE,
         ylab = "Frequency",
         args.legend = list(x = "topright"))
 
-
-        
 # Calculate codon usage for E. coli
 ecoli_codon_usage <- uco(unlist(ecoli_cds), frame = 0, index = "freq")
 
@@ -186,10 +205,10 @@ sapros_codon_usage_vector <- as.vector(sapros_codon_usage)
 # Ensure both vectors have the same length for comparison
 if (length(ecoli_codon_usage_vector) == length(sapros_codon_usage_vector)) {
   
-# Create a matrix for codon usage comparison
+  # Create a matrix for codon usage comparison
   codon_usage_matrix <- rbind(ecoli_codon_usage_vector, sapros_codon_usage_vector)
 
-# Create a bar plot to compare codon usage bias
+  # Create a bar plot to compare codon usage bias
   barplot(codon_usage_matrix, beside = TRUE,
           main = "Codon Usage Bias",
           col = c("blue", "red"),
@@ -200,3 +219,6 @@ if (length(ecoli_codon_usage_vector) == length(sapros_codon_usage_vector)) {
 } else {
   warning("Codon usage vectors for E. coli and Saprospirales have different lengths.")
 }
+
+
+```

@@ -168,3 +168,35 @@ barplot(nuc_freq_matrix, beside = TRUE,
         args.legend = list(x = "topright"))
 
 
+        
+# Calculate codon usage for E. coli
+ecoli_codon_usage <- uco(unlist(ecoli_cds), frame = 0, index = "freq")
+
+# Calculate codon usage for Saprospirales
+sapros_codon_usage <- uco(unlist(saprospirales_cds), frame = 0, index = "freq")
+
+# Check the structure of codon usage outputs
+str(ecoli_codon_usage)
+str(sapros_codon_usage)
+
+# Extract the codon usage frequency values directly (uco might already be a vector)
+ecoli_codon_usage_vector <- as.vector(ecoli_codon_usage)
+sapros_codon_usage_vector <- as.vector(sapros_codon_usage)
+
+# Ensure both vectors have the same length for comparison
+if (length(ecoli_codon_usage_vector) == length(sapros_codon_usage_vector)) {
+  
+# Create a matrix for codon usage comparison
+  codon_usage_matrix <- rbind(ecoli_codon_usage_vector, sapros_codon_usage_vector)
+
+# Create a bar plot to compare codon usage bias
+  barplot(codon_usage_matrix, beside = TRUE,
+          main = "Codon Usage Bias",
+          col = c("blue", "red"),
+          ylab = "Codon Usage Frequency",
+          legend.text = c("E. coli", "Saprospirales"),
+          args.legend = list(x = "topright"))
+  
+} else {
+  warning("Codon usage vectors for E. coli and Saprospirales have different lengths.")
+}

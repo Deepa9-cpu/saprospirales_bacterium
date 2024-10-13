@@ -256,7 +256,6 @@ if (length(ecoli_codon_usage_vector) == length(sapros_codon_usage_vector)) {
 ```
 
 ## Difference between two organism:
-here
 The primary difference between E. coli and Saprospirales bacterium (GCA_003448025) lies in the total coding DNA, with E. coli having 3,978,528 base pairs and Saprospirales having 4,200,321 base pairs. This suggests that Saprospirales may possess a slightly larger genome, potentially allowing for more diverse metabolic and environmental adaptations compared to E. coli.
 
 
